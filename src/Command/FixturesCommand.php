@@ -50,7 +50,7 @@ class FixturesCommand extends Command
             ->addArgument(
                 'status',
                 InputArgument::OPTIONAL,
-                'TODAY, FINISHED, ALL are valid options.'
+                'TODAY, CURRENT, FINISHED, ALL are valid options.'
             )
         ;
     }
@@ -77,6 +77,15 @@ class FixturesCommand extends Command
         $data = $this->fetch();
 
         foreach ($data->fixtures as $fixture) {
+            if($status == 'CURRENT') {
+                if($fixture->status == 'IN_PLAY') {
+                    $match_date = new DateTime($fixture->date);
+                    $match_date->setTimezone( new DateTimeZone($this->timezone));
+
+                    $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
+                }
+            }
+
             if($status == 'ALL') {
                 $match_date = new DateTime($fixture->date);
                 $match_date->setTimezone( new DateTimeZone($this->timezone));
