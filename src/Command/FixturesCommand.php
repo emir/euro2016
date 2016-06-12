@@ -18,11 +18,6 @@ class FixturesCommand extends Command
     protected $client;
 
     /**
-     * @var string
-     */
-    public $timezone;
-
-    /**
      * FixturesCommand constructor.
      *
      * @param \GuzzleHttp\Client $client
@@ -32,14 +27,6 @@ class FixturesCommand extends Command
         parent::__construct();
 
         $this->client = $client;
-    }
-
-    /**
-     * @param mixed $timezone
-     */
-    public function setTimezone($timezone)
-    {
-        $this->timezone = $timezone;
     }
 
     protected function configure()
@@ -80,7 +67,7 @@ class FixturesCommand extends Command
             if($status == 'CURRENT') {
                 if($fixture->status == 'IN_PLAY') {
                     $match_date = new DateTime($fixture->date);
-                    $match_date->setTimezone( new DateTimeZone($this->timezone));
+                    $match_date->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
                     $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
                 }
@@ -88,7 +75,7 @@ class FixturesCommand extends Command
 
             if($status == 'ALL') {
                 $match_date = new DateTime($fixture->date);
-                $match_date->setTimezone( new DateTimeZone($this->timezone));
+                $match_date->setTimezone( new DateTimeZone(date_default_timezone_get()));
 
                 $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
             }
@@ -96,22 +83,17 @@ class FixturesCommand extends Command
             if($status == 'FINISHED') {
                 if($fixture->status == 'FINISHED') {
                     $match_date = new DateTime($fixture->date);
-                    $match_date->setTimezone( new DateTimeZone($this->timezone));
+                    $match_date->setTimezone( new DateTimeZone(date_default_timezone_get()));
 
                     $output->writeln("$fixture->status <comment>{$match_date->format('M, d - H:i')}:</comment> <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
                 }
             }
 
             if($status == 'TODAY') {
-                $today = new DateTime();
-                $today->setTimezone(new DateTimeZone($this->timezone));
-
                 $match_date = new DateTime($fixture->date);
-                $match_date->setTimezone(new DateTimeZone($this->timezone));
+                $match_date->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
-                $interval = $today->diff($match_date);
-
-                if($interval->days == 0) {
+                if($match_date->format('d') == (new DateTime())->format('d')) {
                     $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
                 }
             }

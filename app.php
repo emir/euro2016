@@ -4,12 +4,10 @@
 require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use Euro2016\Command\FixturesCommand;
 
 $application = new Application();
 $client = new GuzzleHttp\Client();
 
-$euro2016 = new \Euro2016\Command\FixturesCommand($client);
-$euro2016->setTimeZone(exec('date +%Z'));
-
-$application->add($euro2016);
+$application->add(new FixturesCommand($client));
 $application->run();
