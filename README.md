@@ -22,7 +22,7 @@ Usage
 
 `php app.php fixtures`
 
-Default argument is today. Also **finished** and **all** are supported arguments.
+Default argument is today. Also **current**, **finished** and **all** are supported arguments.
 
 License
 -------------
