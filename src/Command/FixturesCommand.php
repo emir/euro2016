@@ -7,6 +7,7 @@ use DateTimeZone;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use GuzzleHttp\Client;
 
@@ -38,6 +39,12 @@ class FixturesCommand extends Command
                 'status',
                 InputArgument::OPTIONAL,
                 'TODAY, CURRENT, FINISHED, ALL are valid options.'
+            )
+            ->addOption(
+                'team',
+                't',
+                InputOption::VALUE_REQUIRED,
+                'Only return specified team\'s matches'
             )
         ;
     }
@@ -77,7 +84,13 @@ class FixturesCommand extends Command
                 $match_date = new DateTime($fixture->date);
                 $match_date->setTimezone( new DateTimeZone(date_default_timezone_get()));
 
-                $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
+                if ($input->getOption('team')) {
+                    if($fixture->homeTeamName === $input->getOption('team') || $fixture->awayTeamName === $input->getOption('team')) {
+                        $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
+                    }
+                } else {
+                    $output->writeln("($fixture->status <comment>{$match_date->format('M, d - H:i')}</comment>) <info>{$fixture->homeTeamName} {$fixture->result->goalsHomeTeam} - {$fixture->awayTeamName} {$fixture->result->goalsAwayTeam}</info>");
+                }
             }
 
             if($status == 'FINISHED') {
