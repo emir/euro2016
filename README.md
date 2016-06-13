@@ -7,7 +7,8 @@ UEFA EURO 2016 results for hackers.
 
 Data Source: [http://api.football-data.org/v1/soccerseasons/424](http://api.football-data.org/v1/soccerseasons/424)
 
-![app.php](http://i.imgur.com/Zk9Jk33.png)
+<img src="screenshot.png" />
+
 
 ### Installing
 
@@ -29,6 +30,14 @@ Default argument is today. Also **current**, **finished** and **all** are suppor
 With argument **all** you can specified team you want to see schedule/results. For example:
 
 `php app.php fixtures all -t Turkey`
+
+You can always add **euro2016** alias on your .bashrc or .zshrc (That's how I use)
+
+`alias euro2016='php projects/euro2016/app.php fixtures'`
+
+and use like this:
+
+`euro2016 current`
 
 License
 -------------
