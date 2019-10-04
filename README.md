@@ -27,6 +27,7 @@ Usage
 `php app.php fixtures`
 
 Default argument is today. Also **current**, **finished** and **all** are supported arguments.
+
 With argument **all** you can specified team you want to see schedule/results. For example:
 
 `php app.php fixtures all -t Turkey`
